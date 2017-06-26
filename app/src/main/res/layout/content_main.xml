@@ -15,6 +15,7 @@
         tools:context="com.github.ristoautio.stunningparakeet.MainActivity">
 
     <TextView
+            android:id="@+id/hello"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello World!"/>
