@@ -17,6 +17,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 }
 
 def AAVersion = '4.3.1'
@@ -32,4 +42,7 @@ dependencies {
 
     annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+//    compile "com.github.mjeanroy:exiftool-lib:2.1.0"
+//    compile "org.apache.pdfbox:pdfbox:2.0.4"
+    compile 'com.tom_roush:pdfbox-android:1.8.9.1'
 }
