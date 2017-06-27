@@ -1,37 +1,47 @@
 package com.github.ristoautio.stunningparakeet;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
+@EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
-    private TextView text;
+    private static final String TAG = "MainActivity";
+
+    @ViewById
+    TextView tvHello;
+
+    @ViewById
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    @AfterViews
+    void bindActionBar() {
+        Log.d(TAG, "bindActionBar: afterviews");
         setSupportActionBar(toolbar);
-        text = (TextView) findViewById(R.id.hello);
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-                text.setText("testing");
-            }
-        });
+    @Click(R.id.fab)
+    void onFabClick(View view) {
+        Log.d(TAG, "onFabClick: click");
+        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+        tvHello.setText("testing");
     }
 
     @Override

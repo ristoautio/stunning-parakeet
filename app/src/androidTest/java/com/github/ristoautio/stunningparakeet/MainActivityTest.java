@@ -19,11 +19,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class MainActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> menuActivityTestRule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<MainActivity_> menuActivityTestRule = new ActivityTestRule<>(MainActivity_.class, true, true);
 
     @Test
     public void testSomethig() throws InterruptedException {
         onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.hello)).check(matches(withText("testing")));
+        onView(withId(R.id.tvHello)).check(matches(withText("testing")));
     }
 }
