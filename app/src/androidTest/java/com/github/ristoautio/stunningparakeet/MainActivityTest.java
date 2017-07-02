@@ -1,5 +1,6 @@
 package com.github.ristoautio.stunningparakeet;
 
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import org.junit.Rule;
@@ -9,6 +10,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -23,7 +25,7 @@ public class MainActivityTest {
 
     @Test
     public void testSomethig() throws InterruptedException {
-        onView(withId(R.id.fab)).perform(click());
-        onView(withId(R.id.tvHello)).check(matches(withText("testing")));
+        onView(withId(R.id.tvHello)).check(matches(withText("No file selected")));
+        onView(withId(R.id.fab)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
     }
 }

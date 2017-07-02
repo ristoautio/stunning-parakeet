@@ -1,9 +1,10 @@
 package com.github.ristoautio.stunningparakeet;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,8 +26,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Set;
 
-//import org.apache.pdfbox.pdmodel.PDDocument;
-
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +35,15 @@ public class MainActivity extends AppCompatActivity {
     TextView tvHello;
 
     @ViewById
+    TextView tvFileData;
+
+    @ViewById
     Toolbar toolbar;
+
+    @ViewById
+    FloatingActionButton fab;
+
+    private File fileHolder = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
     void bindActionBar() {
         Log.d(TAG, "bindActionBar: afterviews");
         setSupportActionBar(toolbar);
+
+        if(fileHolder == null){
+            fab.setVisibility(View.INVISIBLE);
+            tvHello.setText(getString(R.string.no_file_selected));
+            tvFileData.setText("");
+        }
+
         Intent intent = getIntent();
         if(intent.getAction().compareTo(Intent.ACTION_VIEW) == 0){
 
@@ -81,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private void parsePdf(Intent intent) throws URISyntaxException, IOException {
         Log.d(TAG, "bindActionBar: open das file at: " + intent.getDataString());
         File file = new File(new URI(intent.getDataString()));
+        fileHolder = file;
         Log.d(TAG, "bindActionBar: found file " + file.getName());
         PDFBoxResourceLoader.init(getApplicationContext());
 
@@ -92,18 +107,39 @@ public class MainActivity extends AppCompatActivity {
         Set<String> keys = info.getMetadataKeys();
         if (!keys.isEmpty()) {
             Log.d(TAG, "has metakeys");
+            tvHello.setText(file.getName());
+            StringBuilder builder = new StringBuilder();
             for (String key : keys) {
+                CharSequence text = tvFileData.getText();
+                Log.d(TAG, "parsePdf: current text: " + text);
                 Log.d(TAG, key + " -- " + (String) info.getPropertyStringValue(key));
+                builder.append(key)
+                        .append(": \t")
+                        .append((String) info.getPropertyStringValue(key))
+                        .append("\n");
+                tvFileData.setText(builder.toString());
             }
         }
     }
 
+    private void openFile() {
+        Uri uri = Uri.fromFile(fileHolder);
+        String mime = getContentResolver().getType(uri);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, mime);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
+    }
+
     @Click(R.id.fab)
-    void onFabClick(View view) {
-        Log.d(TAG, "onFabClick: click");
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        tvHello.setText("testing");
+    void onFabClick() {
+        Log.d(TAG, "onFabClick: clicked fab");
+        if (fileHolder != null) {
+            openFile();
+        }else{
+            fab.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
